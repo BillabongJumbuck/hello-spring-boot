@@ -7,50 +7,32 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/api/v1/users")
 public class HelloController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public HelloController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public HelloController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/hello")
-    public String  sayHello() {
-        return "Hello World";
-    }
-
-    @GetMapping("hello/{name}")
-    public String  sayHello(@PathVariable String name) {
-        return "Hello " + name;
-    }
-
-    @GetMapping("/greeting")
-    public String  sayGreeting(@RequestParam String name) {
-        return "Hello " + name + " for Spring Boot";
-    }
-
-    // 新增用户：POST请求
-    @PostMapping("/users")
+    @PostMapping
     public User createUser(@RequestBody User user) {
-        return userRepository.save(user);
+        return userService.createUser(user);
     }
 
-    // 获取所有用户：GET请求
-    @GetMapping("/users")
+    @GetMapping
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userService.findAllUsers();
     }
 
-    // 根据ID获取单个用户
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public Optional<User> getUserById(@PathVariable Long id) {
-        return userRepository.findById(id);
+        return userService.findUserById(id);
     }
 
-    // 根据ID删除用户
-    @DeleteMapping("/users/{id}")
-    public void deleteUserById(@PathVariable Long id) {
-        userRepository.deleteById(id);
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteUserById(id);
     }
 }
